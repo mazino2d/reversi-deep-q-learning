@@ -5,14 +5,14 @@ from copy import deepcopy
 
 
 def opponent(x):
-    """Given a string representing a color (must be either "B" or "W"),
+    """Given a string representing a color (must be either 0 or 1),
     return the opposing color"""
-    if x == "b" or x == "B":
-        return "W"
-    elif x == "w" or x == "W":
-        return "B"
+    if x == 0:
+        return 1
+    elif x == 1:
+        return 0
     else:
-        return "."
+        return -1
 
 
 def validMove(board, color, pos):
@@ -20,7 +20,7 @@ def validMove(board, color, pos):
     representing a color, and a tuple representing a
     position, return true if the position is a valid
     move for the color"""
-    if board[pos[0]][pos[1]] != ".":
+    if board[pos[0]][pos[1]] != -1:
         return False
     for i in range(-1, 2):
         for j in range(-1, 2):
@@ -96,7 +96,7 @@ def canFlip(board, color, pos, direction):
             return False
         if board[currX][currY] == color:
             return True
-        if board[currX][currY] == ".":
+        if board[currX][currY] == -1:
             return False
 
 
@@ -105,11 +105,11 @@ def newBoard():
     'B' for black, 'W' for white, and '.' for empty"""
     result = []
     for i in range(3):
-        result = result + [["."] * 8]
-    result = result + [["."] * 3 + ["W", "B"] + ["."] * 3]
-    result = result + [["."] * 3 + ["B", "W"] + ["."] * 3]
+        result = result + [[-1] * 8]
+    result = result + [[-1] * 3 + [1, 0] + [-1] * 3]
+    result = result + [[-1] * 3 + [0, 1] + [-1] * 3]
     for i in range(3):
-        result = result + [["."] * 8]
+        result = result + [[-1] * 8]
     return result
 
 
@@ -117,7 +117,7 @@ def printBoard(board):
     """ Print a board, with letters and numbers as guides """
     print(" " + "".join(map(chr, range(ord("A"), ord("H") + 1))))
     for (x, y) in zip(range(1, 9), board):
-        print(str(x) + "".join(y))
+        print(str(x) + str(y))
     print("Black = %d, White = %d" % score(board))
 
     # For fun, here is a one-line board printer, without the
@@ -127,7 +127,7 @@ def printBoard(board):
 
 def gameOver(board):
     """ return true if the game is over, that is, no valid moves """
-    return valid(board, "B", "pass") and valid(board, "W", "pass")
+    return valid(board, 0, "pass") and valid(board, 1, "pass")
 
 
 def score(board):
@@ -136,9 +136,9 @@ def score(board):
     black = white = 0
     for row in board:
         for square in row:
-            if square == "B":
+            if square == 0:
                 black = black + 1
-            elif square == "W":
+            elif square == 1:
                 white = white + 1
     return (black, white)
 
@@ -152,7 +152,7 @@ def playGame(p1, p2, verbose=False, t=128):
     for white, and the  invalid move (for a game that ends with
     and invalid move"""
     board = newBoard()
-    (currColor, nextColor) = ("B", "W")
+    (currColor, nextColor) = (0, 1)
     p1time = t
     p2time = t
     p1realTime = t * 2  # gives a little extra time to each player
@@ -172,14 +172,14 @@ def playGame(p1, p2, verbose=False, t=128):
         p1realTime = p1realTime - (t2 - t1)
         # if p1time < 0:
         if p1realTime < 0:
-            if currColor == "B":
+            if currColor == 0:
                 return (0, 64, board, "Timeout")
             else:
                 return (64, 0, board, "Timeout")
         if valid(board, currColor, nextMove):
             doMove(board, currColor, nextMove)
         else:
-            if currColor == "B":
+            if currColor == 0:
                 return (0, 64, board, "Bad Move: %s" % str(nextMove))
             else:
                 return (64, 0, board, "Bad Move: %s" % str(nextMove))

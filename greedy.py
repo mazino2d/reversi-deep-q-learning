@@ -6,15 +6,15 @@ def value(board):
     value = 0
     for row in board:
         for elem in row:
-            if elem == "W":
+            if elem == 1:
                 value = value + 1
-            elif elem == "B":
+            elif elem == 0:
                 value = value - 1
     return value
 
 
 def betterThan(val1, val2, color, reversed):
-    if color == "W":
+    if color == 1:
         retVal = val1 > val2
     else:
         retVal = val2 > val1  # was typo here, val2<val1

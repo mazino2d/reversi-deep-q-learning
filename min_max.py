@@ -115,9 +115,9 @@ def utility(state, color):
     answer = 0
     if gameplay.score(state)[0] == gameplay.score(state)[1]:
         answer = 0
-    elif gameplay.score(state)[0] < gameplay.score(state)[1] and color == "W":
+    elif gameplay.score(state)[0] < gameplay.score(state)[1] and color == 1:
         answer = INF
-    elif gameplay.score(state)[0] > gameplay.score(state)[1] and color == "B":
+    elif gameplay.score(state)[0] > gameplay.score(state)[1] and color == 0:
         answer = INF
     else:
         answer = -INF
